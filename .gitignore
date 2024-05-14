@@ -1,6 +1,7 @@
 # flame-fitting
 .vscode
 .configs
+res
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

@@ -1,0 +1,24 @@
+av==12.0.0
+certifi==2024.2.2
+charset-normalizer==3.3.2
+easydict==1.13
+ffmpeg-python==0.2.0
+future==1.0.0
+idna==3.7
+imageio==2.34.1
+markdown-it-py==3.0.0
+mdurl==0.1.2
+numpy==1.26.4
+opencv-python==4.9.0.80
+pillow==10.3.0
+PIMS==0.6.1
+Pygments==2.18.0
+PyYAML==6.0.1
+requests==2.31.0
+rich==13.7.1
+slicerator==1.1.0
+torch @ file:///media/ankarako/data/dev/whls/torch-1.13.0%2Bcu117-cp310-cp310-linux_x86_64.whl
+torchvision @ file:///media/ankarako/data/dev/whls/torchvision-0.14.0%2Bcu117-cp310-cp310-linux_x86_64.whl
+tqdm==4.66.4
+typing_extensions==4.11.0
+urllib3==2.2.1
