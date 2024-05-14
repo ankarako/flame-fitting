@@ -1,1 +1,2 @@
 import submodules.RobustVideoMatting as RobustVideoMatting
+import submodules.DECA as DECA

@@ -11,6 +11,7 @@ class VideoState:
     frames: List[np.ndarray] = field(default_factory=lambda: [])
     width: int = -1
     height: int = -1
+    extracted_filepaths: List[str] = field(default_factory=lambda: [])
 
 def read_video(filepath: str) -> VideoState:
     """
