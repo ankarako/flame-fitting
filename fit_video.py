@@ -257,7 +257,7 @@ if __name__ == "__main__":
     detect_iris(output_dir)
 
     # optimize for every frame
-    optim.optimize_directory(output_dir)
+    optim.optimize_directory(output_dir, video_state.width, video_state.height, conf.lmk_emb_weyes, k_device)
 
     log.INFO(f"Flame-Video-Fitting terminated.")
     log.INFO(f"Output directory: {conf.output_dir}")
