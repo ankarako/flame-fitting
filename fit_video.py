@@ -33,7 +33,7 @@ import optimization as optim
 # inference device
 k_device_name = 'cuda' if torch.cuda.is_available() else 'cpu'
 k_device = torch.device(k_device_name)
-
+k_ = "AIzaSyCtA8LkkyxCYEiF7oZQjgMXnkfbxfwZBC8"
 
 def extract_frames(filepath: str, output: str):
     """
