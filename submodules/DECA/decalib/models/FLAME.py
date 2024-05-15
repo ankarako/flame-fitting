@@ -19,6 +19,8 @@ import numpy as np
 import pickle
 import torch.nn.functional as F
 
+k_iris_vert_idxs = [4051, 4597] # leye, reye
+
 from .lbs import lbs, batch_rodrigues, vertices2landmarks, rot_mat_to_euler
 
 def to_tensor(array, dtype=torch.float32):
@@ -217,6 +219,13 @@ class FLAME(nn.Module):
         landmarks3d = vertices2landmarks(vertices, self.faces_tensor,
                                        self.full_lmk_faces_idx.repeat(bz, 1),
                                        self.full_lmk_bary_coords.repeat(bz, 1, 1))
+        
+        leye_lmk = vertices[:, k_iris_vert_idxs[0]].unsqueeze(1)
+        reye_lmk = vertices[:, k_iris_vert_idxs[1]].unsqueeze(1)
+        landmarks2d = torch.cat([
+            landmarks2d, leye_lmk, reye_lmk
+        ], dim=1)
+
         return vertices, landmarks2d, landmarks3d
 
 class FLAMETex(nn.Module):

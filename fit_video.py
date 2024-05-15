@@ -230,6 +230,10 @@ def prepare_output_dir(input_fpath: str, output: str) -> None:
         os.mkdir(output_video_dir)
     return output_video_dir
 
+def fit_video(input_video: str, output_dir: str, rvm_chkp: str):
+    """
+
+    """
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser("Flame-Video-Fitting")
@@ -257,7 +261,7 @@ if __name__ == "__main__":
     detect_iris(output_dir)
 
     # optimize for every frame
-    optim.optimize_directory(output_dir, video_state.width, video_state.height, conf.lmk_emb_weyes, k_device)
+    optim.optimize_directory(output_dir, video_state.width, video_state.height, k_device)
 
     log.INFO(f"Flame-Video-Fitting terminated.")
     log.INFO(f"Output directory: {conf.output_dir}")
