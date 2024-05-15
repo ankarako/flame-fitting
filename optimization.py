@@ -247,6 +247,9 @@ def optimize_directory(
     json_path = os.path.join(output_dir, 'DECA', "flame_deca_space.json")
     intrinsics = [1500, 1500, 256, 256]
     size = width
+    if os.path.exists(os.path.join(output_dir, "flame_params.json")):
+        return
+    
     model.run(
         deca_code_file=os.path.join(output_dir, 'DECA', 'flame_space_deca.json'),
         face_kpts_file=os.path.join(output_dir, 'keypoints.json'),

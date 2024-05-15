@@ -7,6 +7,7 @@ import numpy as np
 import cv2
 
 import submodules
+import submodules.FaceParsingPyTorch
 import util
 import log
 import json
@@ -213,6 +214,18 @@ def detect_iris(output_dir: str):
         json.dump(landmarks, outfd)
 
 
+def perform_segmentation(output_dir: str, chkp_path: str):
+    """
+    Segment each frame with face-parsing
+    """
+    log.INFO("Running FaceParsing...")
+    dir_to_eval = os.path.join(output_dir, 'image')
+    output_path = os.path.join(output_dir, 'semantic')
+    if not os.path.exists(output_path):
+        os.mkdir(output_path)
+    submodules.FaceParsingPyTorch.test.evaluate(output_path, dir_to_eval, chkp_path)
+
+
 
 def prepare_output_dir(input_fpath: str, output: str) -> None:
     """
@@ -228,27 +241,30 @@ def prepare_output_dir(input_fpath: str, output: str) -> None:
         os.mkdir(output_video_dir)
     return output_video_dir
 
-def fit_video(input_video: str, output_dir: str, rvm_chkp: str):
+def fit_video(input_video: str, output_dir: str, rvm_chkp: str, face_parsing_chkp: str):
     """
     Fit everything for a single video
     """
     # prepare output
-    output_dir = prepare_output_dir(conf.input_video, conf.output_dir)
+    output_dir = prepare_output_dir(input_video, output_dir)
 
     # extract frames
-    video_state = extract_frames(conf.input_video, output_dir)
+    video_state = extract_frames(input_video, output_dir)
 
     # run video matting
-    matting(video_state, output_dir, conf.rvm_chkp)
+    matting(video_state, output_dir, rvm_chkp)
 
     # run DECA
-    infer_deca(conf.input_video, output_dir)
+    infer_deca(input_video, output_dir)
 
     # detect facial lmks for each frame
     detect_lmks(output_dir)
 
     # detect iris lmks
     detect_iris(output_dir)
+
+    # face segmentation
+    perform_segmentation(output_dir, face_parsing_chkp)
 
     # optimize for every frame
     optim.optimize_directory(output_dir, video_state.width, video_state.height, k_device)
@@ -259,6 +275,6 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     conf = util.conf.read_conf(args.conf)
-    fit_video(conf.input_video, conf.output_dir, conf.rvm_chkp)
+    fit_video(conf.input_video, conf.output_dir, conf.rvm_chkp, conf.face_parsing_chkp)
     log.INFO(f"Flame-Video-Fitting terminated.")
     log.INFO(f"Output directory: {conf.output_dir}")
