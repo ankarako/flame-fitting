@@ -13,13 +13,11 @@ import log
 GLOBAL_POSE = True
 from submodules.DECA.decalib.deca import DECA
 from submodules.DECA.decalib.utils import util
-# from decalib.utils import util
 from submodules.DECA.decalib.utils.config import cfg as deca_cfg
 from submodules.DECA.decalib.utils import lossfunc
-# from decalib.utils import lossfunc
 
 import cv2
-import argparse
+from tqdm import tqdm
 
 np.random.seed(0)
 
@@ -100,6 +98,7 @@ class Optimizer(object):
 
         # optimization steps
         len_landmark = landmark.shape[1]
+        progress = tqdm(range(1001), total=1001)
         for k in range(1001):
             full_pose = pose
             if not use_iris:
@@ -134,14 +133,20 @@ class Optimizer(object):
             opt_p.zero_grad()
             total_loss.backward()
             opt_p.step()
-
+            progress.update(1)
+            progress.set_postfix({
+                'lmk-loss': landmark_loss2.detach().cpu().item()
+            })
             # visualize
             if k % 100 == 0:
                 with torch.no_grad():
-                    loss_info = '----iter: {}, time: {}\n'.format(k,
-                                                                  datetime.datetime.now().strftime('%Y-%m-%d-%H:%M:%S'))
-                    loss_info = loss_info + f'landmark_loss: {landmark_loss2}'
-                    print(loss_info)
+                    progress.set_postfix({
+                        'process': 'saving output data'
+                    })
+                    # loss_info = '----iter: {}, time: {}\n'.format(k,
+                    #                                               datetime.datetime.now().strftime('%Y-%m-%d-%H:%M:%S'))
+                    # loss_info = loss_info + f'landmark_loss: {landmark_loss2}'
+                    # print(loss_info)
                     trans_verts = projection(verts_p[::50], cam_intrinsics, w2c_p[::50])
                     # trans_landmarks2d_for_visual = projection(landmarks2d_p, cam_intrinsics, w2c_p)
                     shape_images = self.deca.render.render_shape(verts_p[::50], trans_verts)

@@ -232,16 +232,8 @@ def prepare_output_dir(input_fpath: str, output: str) -> None:
 
 def fit_video(input_video: str, output_dir: str, rvm_chkp: str):
     """
-
+    Fit everything for a single video
     """
-
-if __name__ == "__main__":
-    parser = argparse.ArgumentParser("Flame-Video-Fitting")
-    parser.add_argument("--conf", type=str, help="Path to the configuration file to load.")
-    args = parser.parse_args()
-
-    conf = util.conf.read_conf(args.conf)
-
     # prepare output
     output_dir = prepare_output_dir(conf.input_video, conf.output_dir)
 
@@ -263,5 +255,12 @@ if __name__ == "__main__":
     # optimize for every frame
     optim.optimize_directory(output_dir, video_state.width, video_state.height, k_device)
 
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser("Flame-Video-Fitting")
+    parser.add_argument("--conf", type=str, help="Path to the configuration file to load.")
+    args = parser.parse_args()
+
+    conf = util.conf.read_conf(args.conf)
+    fit_video(conf.input_video, conf.output_dir, conf.rvm_chkp)
     log.INFO(f"Flame-Video-Fitting terminated.")
     log.INFO(f"Output directory: {conf.output_dir}")
